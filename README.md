@@ -181,4 +181,46 @@ int main()
 	float a = fabs(30 * (h % 12) + 0.5 * m - 6 * m);
 	a = a > 180 ? 360 - a : a;
 	printf("%.1f", a);
+4 лб 8 задача 
 
+
+#include <iostream>
+#define _CRT_SECURE_NO_WARNINGS
+#include <cstdio>
+
+int main()  
+{
+    double S, sum;
+    int n;
+    setlocale(LC_ALL, "Russian");
+    
+    do {
+        printf("Введите S (> 1): ");
+        scanf_s("%lf", &S);
+    } while (S <= 1);
+    // 1. Цикл for параментр 
+    sum = 0;
+    n = 0;
+    for (int i = 0;sum <= S; i++) {
+        sum += (double)(2 * i + 1) / (2 * i + 2);
+        n++;
+    }
+    printf("for : %d элементов\n", n);
+    // 2. Цикл do while
+    sum = 0;
+    n = 0;
+    do {
+        sum += (double)(2 * n + 1) / (2 * n + 2);
+        n++;
+    } while (sum <= S);
+    printf("do while: %d элементов\n", n);
+    // 3. Цикл while
+    sum = 0;
+    n = 0;
+    while (sum <= S) {
+        sum += (double)(2 * n + 1) / (2 * n + 2);
+        n++;
+    }
+    printf("while: %d элементов\n", n);
+    return 0;;
+}
