@@ -224,3 +224,46 @@ int main()
     printf("while: %d элементов\n", n);
     return 0;;
 }
+4 лб 20 задача 
+#include <iostream>
+#include <stdio.h>
+#define _CRT_SECURE_NO_WARNINGS
+
+int main()
+{
+    setlocale(LC_ALL, "Russian");
+    long long k; //большие цел числа
+    do {
+        printf("Введите положительное число К (К<=10^9):");
+        if (scanf_s("%lld", &k) != 1)
+            return 0;
+        if (k < 1)
+            printf("число не положительное!");
+    } while (k < 1);
+    // while 
+    long long k1 = k;
+    printf("Резульат через while :");
+    while (k1 > 0) {
+        int digit = k1 % 10; // последняя цифра числа 
+        printf("%d", digit);
+        k1 /= 10;
+    }
+    printf("\n");
+    // do while 
+    long long k2 = k;
+    printf("Резульат через do while :");
+    do {
+        int digit = k2 % 10; // последняя цифра числа 
+        printf("%d", digit);
+        k2 /= 10;
+    } while (k2 > 0);
+    printf("\n");
+    // for 
+    long long k3 = k;
+    printf("Резульат через for :");
+    for (;k3 > 0;k3 /= 10) {
+        printf("%lld", k3 % 10);
+    }
+    printf("\n");
+    return 0;
+}
