@@ -267,3 +267,65 @@ int main()
     printf("\n");
     return 0;
 }
+
+5 лб 8 задача 
+#include <iostream>
+#include <iostream>
+#include <cstdio>
+#include <clocale>
+#include <cstdlib>
+#include <ctime>
+#include <algorithm>
+
+using namespace std;
+
+const int NMAX = 10;
+
+int main()
+{
+    setlocale(LC_ALL, "Russian");
+    srand(time(0));
+    int N;
+    double a[NMAX], b[NMAX];
+    int k = 0;
+    do {
+        printf("Введите количество элементов массива (от 1 до %d): ", NMAX);
+        if (scanf_s("%d", &N) != 1) {
+            printf("Ошибка ввода!\n");
+            return 1;
+        }
+        if (N < 1 || N > NMAX) {
+            printf("Введите число от 1 до %d!\n", NMAX);
+        }
+
+    } while (N < 1 || N > NMAX);
+    printf("\nИсходный массив:\n");
+    for (int i = 0; i < N; i++) {
+        a[i] = 1.0 + (rand() / (RAND_MAX + 1.0)) * 9.0;
+        printf("%.2f ", a[i]);
+        double fractional = a[i] - (int)a[i];
+        if (fractional < 0.5) {
+            b[k] = a[i];
+            k++;
+        }
+    }
+    for (int i = 0; i < k - 1; i++) { // сортировка по возрастанию 
+        for (int j = 0; j < k - i - 1; j++) {
+            if (b[j] > b[j + 1]) {
+                double temp = b[j];
+                b[j] = b[j + 1];
+                b[j + 1] = temp;
+            }
+        }
+    }
+    printf("\n\nЭлементы с дробной частью меньше 0.5 "
+        "в порядке возрастания:\n");
+    if (k == 0) {
+        printf("Таких элементов нет.\n");
+    }
+    for (int i = 0; i < k; i++) {
+        printf("%.2f ", b[i]);
+    }
+    printf("\n");
+    return 0;
+}
