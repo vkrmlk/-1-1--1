@@ -329,3 +329,46 @@ int main()
     printf("\n");
     return 0;
 }
+5 лб 20 
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+#include <locale.h>
+int main()
+{
+    setlocale(LC_ALL, "Russian");
+    srand(time(NULL));
+    const int MAX = 100;
+    double a[MAX];
+    int N;
+    double sum = 0;
+    printf("Введите количество чисел в массиве (от 1 до 100): ");
+    scanf_s("%d", &N);
+    while (N < 1 || N > MAX)
+    {
+        printf("Ошибка! Введите количество от 1 до 100: ");
+        scanf_s("%d", &N);
+    }
+    printf("\nМассив:\n");
+    for (int i = 0; i < N; i++)
+    {
+        a[i] = 3.0 + (rand() / (double)RAND_MAX)* 7.0 ;
+        printf("%.2f ", a[i]);
+        sum += a[i];
+    }
+	     double sr = sum / N; //среднее арифметическое
+    int minIndex = 0; //ближайшее число
+    for (int i = 1; i < N; i++)
+    {
+        if (fabs(a[i] - sr) < fabs(a[minIndex] - sr))
+        {
+            minIndex = i;
+        }
+    }
+    printf("\n\nСреднее арифметическое: %.2f\n", sr);
+    printf("Ближайшее число: %.2f\n", a[minIndex]);
+    printf("Номер числа: %d\n", minIndex + 1);
+
+    return 0;
+}
