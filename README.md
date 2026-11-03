@@ -372,3 +372,67 @@ int main()
 
     return 0;
 }
+6 лб 8 задача 
+#include <iostream>
+#include <stdio.h>
+#include <locale.h>
+const int ISLANDS = 4;
+const int MONTHS = 12;
+int FindMax(double temperature[4][12], int month) // нахождение максимальной температуры
+{
+    int maxIndex = 0;
+    for (int i = 1; i < ISLANDS; i++)
+    {
+        if (temperature[i][month] > temperature[maxIndex][month])
+        {
+            maxIndex = i;
+        }
+    }
+    return maxIndex;
+}
+int main()
+{
+    setlocale(LC_ALL, "Russian");
+    srand((unsigned int)time(NULL));
+    char islands[4][20] =
+    {
+        "Куба",
+        "Тринидад",
+        "Ямайка",
+        "Гаити"
+    };
+    double temperature[4][12];
+    for (int i = 0; i < ISLANDS; i++) // температуры
+    {
+        for (int j = 0; j < MONTHS; j++)
+        {
+            temperature[i][j] = 20 + ( rand() % 160 ) / 10.0;
+        }
+    }
+    printf("Таблица среднемесячных температур:\n\n"); // таблица температур
+    printf("%-12s", "Остров");
+    for (int j = 0; j < MONTHS; j++)
+    {
+        printf("%5d", j + 1);
+    }
+    printf("\n");
+    for (int i = 0; i < ISLANDS; i++)
+    {
+        printf("%-12s", islands[i]);
+        for (int j = 0; j < MONTHS; j++)
+        {
+            printf("%5.1f", temperature[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\nМаксимальная температура по месяцам:\n\n");//  максимальная температура каждого месяца
+    for (int j = 0; j < MONTHS; j++)
+    {
+        int maxIndex = FindMax(temperature, j);
+        printf("Месяц %2d: %-12s %.1f градусов\n",
+            j + 1,
+            islands[maxIndex],
+            temperature[maxIndex][j]);
+    }
+    return 0;
+}
