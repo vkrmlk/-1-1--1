@@ -436,3 +436,53 @@ int main()
     }
     return 0;
 }
+6 лб 20 задача 
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
+const int N = 3;
+const int M = 5;
+
+
+int main()
+
+{
+    setlocale(LC_ALL, "Russian");
+    int a[N][M];
+    srand((unsigned int)time(0));
+    for (int i = 0; i < N; i++) { // Заполнение массива 
+        for (int j = 0; j < M; j++) {
+            a[i][j] = rand() % 100 + 1;
+        }
+    }
+    printf("                            пробег \n\n");
+    printf("%-15s", "номер машины");
+    for (int j = 0; j < M; j++) {
+        printf("%7d", j + 1);
+    }
+    printf("\n");
+    for (int i = 0; i < N; i++) { // Вывод массива
+        printf("%-15d", i + 1);
+        for (int j = 0; j < M; j++) {
+            printf("%7d", a[i][j]);
+        }
+        printf("\n");
+    }
+    int maxSum = 0;
+    int maxCar = 0;
+    for (int i = 0; i < N; i++) { // поиск макс пробега 
+        int sum = 0;
+        for (int j = 0; j < M; j++) {
+            sum += a[i][j];
+        }
+
+        if (sum > maxSum) {
+            maxSum = sum;
+            maxCar = i;
+        }
+    }
+    printf("\nАвтомобиль с максимальным пробегом: %d\n", maxCar + 1);
+    printf("Максимальный пробег: %d\n", maxSum);
+    return 0;
+}
