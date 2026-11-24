@@ -486,3 +486,193 @@ int main()
     printf("Максимальный пробег: %d\n", maxSum);
     return 0;
 }
+7 ЛБ 
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <windows.h>
+
+const int MAX_STUDENTS = 100;
+const int MIN_YEAR = 1970;
+const int MAX_YEAR = 2010;
+
+const int MIN_MARK = 2;
+const int MAX_MARK = 5;
+const int BAD_MARK = 2;
+char subjects[5][20] = { "физика","химия","информ","матем","история" };
+struct Date {
+    unsigned char day;
+    unsigned char month;
+    int year;
+};
+struct Student {
+    char surname[50];
+    char name[50];
+    char patronymic[50];
+    Date birth;
+
+    int count;
+    int data[5][2];
+};
+
+bool isLeap(int year) { //логический проверка на весокосный год
+    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+}
+
+int daysInMonth(int month, int year) { //  сколько дней в месяце проверка
+    if (month == 2) {
+        if (isLeap(year)) return 29;
+        return 28;
+    }
+    if (month == 4 || month == 6 || month == 9 || month == 11) return 30;
+    return 31;
+}
+int getMark(Student s, int code) { // найти оценку по коду предмета 
+    for (int k = 0; k < s.count; k++) {
+        if (s.data[k][0] == code)
+            return s.data[k][1];
+    }
+    return 0;
+}
+
+int isUsed(Student s, int k, int code) { // проверка был ли введен код предмента 
+    for (int j = 0; j < k; j++) {
+        if (s.data[j][0] == code) return 1;
+    }
+    return 0;
+}
+
+void printHeader() { // шабка таблицы 
+    printf("%-15s%-15s%-15s%-12s%s\n", "Фамилия", "Имя", "Отчество", "День рожд.", "Оценки");
+}
+
+void printRow(Student s) { // вывод студента одной строки 
+    printf("%-15s%-15s%-15s%02d/%02d/%-4d  ", s.surname, s.name, s.patronymic,
+        s.birth.day, s.birth.month, s.birth.year);
+    for (int k = 0; k < s.count; k++) {
+        printf("%s:%d ",subjects[ s.data[k][0]-1],s.data[k][1]);
+    }
+    printf("\n");
+}
+
+void printAll(Student st[], int n) { //вывод всех студентов 
+    printf("\n");
+    printHeader();
+    for (int i = 0; i < n; i++) {
+        printRow(st[i]);
+    }
+}
+
+void printSurnameV(Student st[], int n) { // cтуденты с фамилией на букву В
+    printf("\nResult (фамилии на В):\n");
+    printHeader();
+    int count = 0;
+    for (int i = 0; i < n; i++) {
+        if (st[i].surname[0] == 'В') {
+            printRow(st[i]);
+            count++;
+        }
+    }
+    if (count == 0) printf("Таких нет.\n");
+}
+
+void printFailed(Student st[], int n) { // студенты с двойками 
+    printf("\nResult (двойки по физике и химии):\n");
+    printHeader();
+    int count = 0;
+    for (int i = 0; i < n; i++) {
+        if (getMark(st[i], 1) == BAD_MARK && getMark(st[i], 2) == BAD_MARK) {
+            printRow(st[i]);
+            count++;
+        }
+    }
+    if (count == 0) printf("Таких нет.\n");
+}
+int main()
+{
+    SetConsoleCP(1251);
+    SetConsoleOutputCP(1251);
+
+    Student st[MAX_STUDENTS];
+    int n;
+
+    printf("Введите кол-во студентов: ");
+    scanf_s("%d", &n);
+    while (n < 1 || n > MAX_STUDENTS) {
+        printf("Ошибка! Попробуйте еще раз: ");
+        scanf_s("%d", &n);
+    }
+
+    for (int i = 0; i < n; i++) {
+        printf("Личные данные %d - студент\n", i + 1);
+
+        printf("Фамилия: ");
+        scanf_s("%49s",  st[i].surname, (unsigned)sizeof(st[i].surname)); // приведение типа 
+        printf("Имя: ");
+        scanf_s("%49s",  st[i].name, (unsigned)sizeof(st[i].name));
+        printf("Отчество: ");
+        scanf_s("%49s",  st[i].patronymic, (unsigned)sizeof (st[i].patronymic));
+
+        printf("Год рождения (%d-%d): ", MIN_YEAR, MAX_YEAR);
+        scanf_s("%d", &st[i].birth.year);
+        while (st[i].birth.year < MIN_YEAR || st[i].birth.year > MAX_YEAR) {
+            printf("Ошибка! Попробуйте еще раз: ");
+            scanf_s("%d", &st[i].birth.year);
+        }
+
+        printf("Месяц рождения (1-12): ");
+        scanf_s("%hhu", &st[i].birth.month);
+        while (st[i].birth.month < 1 || st[i].birth.month > 12) {
+            printf("Ошибка! Попробуйте еще раз: ");
+            scanf_s("%hhu", &st[i].birth.month);
+        }
+        // сколько дней в месяце этого года с учетом весокосного года 
+        int maxDay = daysInMonth(st[i].birth.month, st[i].birth.year);
+        printf("День рождения (1-%d): ", maxDay);
+        scanf_s("%hhu", &st[i].birth.day);
+        while (st[i].birth.day < 1 || st[i].birth.day > maxDay) {
+            printf("Ошибка! В этом месяце дней: %d. Попробуйте еще раз: ", maxDay);
+            scanf_s("%hhu", &st[i].birth.day);
+        }
+
+        printf("Сколько предметов (2-5): ");
+        scanf_s("%d", &st[i].count);
+        while (st[i].count < 2 || st[i].count > 5) {
+            printf("Ошибка! Попробуйте еще раз: ");
+            scanf_s("%d", &st[i].count);
+        }
+
+        for (int k = 0; k < st[i].count; k++) {
+            int code;
+            if (k < 2) {
+                code = k + 1;
+                printf("Предмет %d: %s\n", k + 1, subjects[k]);
+            }
+            else {
+                printf("Предмет %d (", k + 1);
+                for (int j = 2; j < 5; j++) {
+                    printf("%d-%s ", j + 1, subjects[j]);
+                }
+                printf("): ");
+                scanf_s("%d", &code);
+                while (code < 3 || code > 5 || isUsed(st[i], k, code)) {
+                    printf("Ошибка! Нужен код от 3 до 5, не повторяя уже введённые. Попробуйте еще раз: ");
+                    scanf_s("%d", &code);
+                }
+            }
+            st[i].data[k][0] = code; // код предмета 
+
+            printf("Оценка по предмету %s (%d-%d): ", subjects[code - 1], MIN_MARK, MAX_MARK);
+            scanf_s("%d", &st[i].data[k][1]);
+            while (st[i].data[k][1] < MIN_MARK || st[i].data[k][1] > MAX_MARK) {
+                printf("Ошибка! Попробуйте еще раз: ");
+                scanf_s("%d", &st[i].data[k][1]);
+            }
+        }
+    }
+
+    printAll(st, n);
+    printSurnameV(st, n);
+    printFailed(st, n);
+
+    return 0;
+}
